@@ -14,6 +14,7 @@ clear:
 	docker compose -f compose.prod.yaml down --remove-orphans
 	docker system prune -f
 	sudo systemctl restart docker
+	
 
 clean-all:
 # Stop all containers
