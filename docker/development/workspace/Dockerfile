@@ -61,13 +61,13 @@ RUN if getent group ${GID}; then \
     usermod -aG sudo www && \
     echo 'www ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 
-# Set proper permissions
-RUN mkdir -p /var/www/storage/framework/{cache,sessions,views} && \
-    mkdir -p /var/www/bootstrap/cache && \
-    chown -R www:www /var/www/storage && \
-    chown -R www:www /var/www/bootstrap/cache && \
-    chmod -R 775 /var/www/storage && \
-    chmod -R 775 /var/www/bootstrap/cache
+# Добавьте:
+RUN mkdir -p /var/www/storage/logs /var/www/storage/framework/{sessions,views,cache} /var/www/bootstrap/cache && \
+    chown -R www:www /var/www/storage /var/www/bootstrap/cache && \
+    chmod -R 775 /var/www/storage /var/www/bootstrap/cache    
+  
+ 
+ 
 
 USER www-data
 
