@@ -13,6 +13,9 @@ services:
       # -----------------------------------------------------------
       - laravel-storage-production:/var/www/storage:ro
       - laravel-public-assets:/var/www/public/build:ro
+      # Добавьте эти volumes для SSL сертификатов
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/lib/letsencrypt:/var/lib/letsencrypt:ro
     networks:
       - laravel-production
     ports:
@@ -21,7 +24,8 @@ services:
       # This allows external access to the Nginx web server running inside the container.
       # For example, if 'NGINX_PORT' is set to '8080', accessing 'http://localhost:8080' will reach the application.
       # -----------------------------------------------------------
-       - "${NGINX_PORT:-8080}:80"
+       - "${NGINX_PORT:-80}:80"
+       - "443:443"  # Добавьте порт для HTTPS
     depends_on:
       php-fpm:
         condition: service_healthy  # Wait for php-fpm health check
@@ -36,6 +40,9 @@ services:
     volumes:
       - laravel-public-assets:/var/www/public/build  # Mount built public assets to ensure the manifest.json and hashed files match between Nginx and PHP-FPM
       - laravel-storage-production:/var/www/storage  # Mount the storage volume
+      # Добавьте эти volumes для SSL сертификатов
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/lib/letsencrypt:/var/lib/letsencrypt:ro
     env_file:
       - .env
     networks:
@@ -57,7 +64,7 @@ services:
     restart: unless-stopped
     user: postgres
     ports:
-      - "${POSTGRES_PORT:-5432}:5432"
+      - "${POSTGRES_PORT:-5434}:5432"
     environment:
       - POSTGRES_DB=${POSTGRES_DATABASE:-app}
       - POSTGRES_USER=${POSTGRES_USERNAME:-laravel}
