@@ -3,12 +3,21 @@ https://github.com/pavel-pj/docker-nginx-pgsql
 
 #Dev version :
 
-1. cp .env.example .env
+- (host) cp .env.example .env
+- (host) sudo mkdir -p vendor
+- (host)sudo chown -R $USER:$USER vendor/
+- docker compose -f compose.dev.yaml exec workspace bash
+- (docker) composer install
+- (host) mkdir node_modules
+- (host) sudo chown -R $USER:$USER node_modules/
+- (host) chmod -R 775 node_modules/
 
-2. sudo mkdir -p vendor
-   sudo chown -R $USER:$USER vendor/
+- (host) chmod 775 public/
+- (host) chown -R $USER:$USER public/
 
-3. docker compose -f compose.dev.yaml exec workspace bash
-          composer install
+- (host) make build-dev
+- (host) make up-dev
+- (docker) npm run dev
+
 
       
