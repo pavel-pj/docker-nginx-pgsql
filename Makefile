@@ -29,3 +29,15 @@ clear-all:
 	docker volume rm -f $$(docker volume ls -q) 2>/dev/null || true
 	docker network prune -f
 	docker system prune -a -f --volumes
+
+make install:
+	sudo cp .env.example .env
+	sudo mkdir -p vendor node_modules
+	sudo chown -R $(USER):$(USER) .
+	sudo find . -type d -exec chmod 755 {} \;
+	sudo find . -type f -exec chmod 644 {} \;
+	sudo chmod -R 755 node_modules/
+	sudo chmod 755 public/
+bash-dev:
+	docker compose -f compose.dev.yaml exec workspace bash	
+
